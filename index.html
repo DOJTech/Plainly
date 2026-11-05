@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plainly</title>
+<meta name="description" content="Plainly explains any bill, medicine label, form, contract or message in simple words, tells you what to do next, and flags scams.">
+<meta property="og:title" content="Plainly: understand any bill, label or letter in seconds">
+<meta property="og:description" content="Snap a photo or paste the text. Get plain words, next steps and a scam check, in your language.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a2140">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon.svg">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f4ef;--card:#fff;--ink:#1d2433;--mute:#5d6577;--line:#e3dfd4;--brand:#2f5bea;--brand-ink:#fff;
+--ok:#1f8a4c;--okbg:#e5f5ec;--warn:#9a6700;--warnbg:#fff3d6;--bad:#b42318;--badbg:#fde8e6;--fs:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12151c;--card:#1b2029;--ink:#eef1f7;--mute:#a2aabb;--line:#2c3342;--brand:#7c9cff;--brand-ink:#0d1220;--ok:#5fd18c;--okbg:#14301f;--warn:#f2c14e;--warnbg:#3a2f0e;--bad:#ff8b80;--badbg:#3d1815}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#12151c;--card:#1b2029;--ink:#eef1f7;--mute:#a2aabb;--line:#2c3342;--brand:#7c9cff;--brand-ink:#0d1220;--ok:#5fd18c;--okbg:#14301f;--warn:#f2c14e;--warnbg:#3a2f0e;--bad:#ff8b80;--badbg:#3d1815}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--fs)/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+h1{font-size:1.6em;margin:0;letter-spacing:-.02em}
+h1 span{color:var(--brand)}
+.tag{color:var(--mute);margin:0 0 18px;font-size:.95em}
+.size button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:6px 12px;font-size:.85em;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{flex:1;padding:12px;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.tab[aria-selected="true"]{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent)}
+textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;background:var(--bg);color:var(--ink);resize:vertical}
+.drop{display:block;border:2px dashed var(--line);border-radius:14px;padding:26px 12px;text-align:center;cursor:pointer;color:var(--mute)}
+.drop strong{color:var(--ink);display:block;font-size:1.05em}
+.drop input{display:none}
+#prev{max-width:100%;max-height:240px;border-radius:12px;display:none;margin:0 auto 10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+select{flex:1;min-width:140px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:.9em}
+.go{width:100%;margin-top:14px;padding:16px;border:0;border-radius:14px;background:var(--brand);color:var(--brand-ink);font:inherit;font-weight:700;font-size:1.1em;cursor:pointer}
+.go:disabled{opacity:.6;cursor:wait}
+.hide{display:none!important}
+.verdict{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:16px;margin-bottom:14px;font-weight:700}
+.verdict.safe{background:var(--okbg);color:var(--ok)}.verdict.caution{background:var(--warnbg);color:var(--warn)}.verdict.danger{background:var(--badbg);color:var(--bad)}
+.verdict .ic{font-size:1.8em}
+.verdict small{display:block;font-weight:500;color:var(--ink);opacity:.85}
+h2{font-size:.8em;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:0 0 8px}
+.big{font-size:1.12em;margin:0}
+ul{margin:0;padding-left:1.2em}li{margin:6px 0}
+ol.steps{list-style:none;padding:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start}
+ol.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:.85em;display:grid;place-items:center;margin-top:2px}
+.flag{padding:10px 12px;border-radius:12px;margin:8px 0;font-size:.95em}
+.flag.high{background:var(--badbg);color:var(--bad)}.flag.medium{background:var(--warnbg);color:var(--warn)}.flag.low{background:var(--okbg);color:var(--ok)}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.num{background:var(--bg);border-radius:12px;padding:10px}.num b{display:block;font-size:1.15em}.num span{color:var(--mute);font-size:.85em}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts button{flex:1;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:.9em;cursor:pointer}
+.err{background:var(--badbg);color:var(--bad);padding:12px;border-radius:12px;margin-top:12px}
+.note{color:var(--mute);font-size:.8em;text-align:center;margin-top:18px}
+.spin{display:inline-block;width:1em;height:1em;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:r .8s linear infinite;vertical-align:-.15em;margin-right:8px}
+@keyframes r{to{transform:rotate(360deg)}}
+.hero{background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 16%,var(--card)),var(--card));border:1px solid var(--line);border-radius:22px;padding:22px 18px;margin-bottom:14px}
+.hl{font-size:1.5em;text-transform:none;letter-spacing:-.02em;color:var(--ink);margin:0 0 8px;line-height:1.2}
+.hero p{margin:0 0 12px;color:var(--mute);font-size:.95em}
+.pills{display:flex;flex-wrap:wrap;gap:8px}.pills span{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:.8em;font-weight:600}
+.ex{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;font-size:.85em;color:var(--mute)}
+.ex button,.hi,.lnk{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:99px;padding:7px 12px;font:inherit;font-size:.85em;cursor:pointer}
+.hi{display:block;width:100%;text-align:left;border-radius:12px;margin-bottom:6px}.lnk{border:0;background:none;color:var(--mute);text-decoration:underline;padding:4px 0}
+.how{margin-top:22px}.hw{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.hw div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}.hw b{display:block}.hw span,.who{color:var(--mute);font-size:.9em}
+.chat{margin-top:14px}.msg{padding:10px 12px;border-radius:12px;margin:8px 0;font-size:.95em}.msg.you{background:color-mix(in srgb,var(--brand) 14%,transparent);margin-left:24px}.msg.bot{background:var(--bg)}
+.askrow{display:flex;gap:8px}.askrow input{flex:1;min-width:0;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:.95em}.askrow button{padding:0 18px;border:0;border-radius:12px;background:var(--brand);color:var(--brand-ink);font:inherit;font-weight:700;cursor:pointer}
+button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible,.drop:focus-within{outline:3px solid var(--brand);outline-offset:2px}
+@media print{:root{--bg:#fff;--card:#fff;--ink:#000;--mute:#333}.wrap>*:not(#out),.acts,.chat{display:none!important}}
+body{position:relative;overflow-x:hidden;min-height:100vh}
+body::before,body::after{content:"";position:fixed;inset:-25%;z-index:-1;pointer-events:none;filter:blur(36px)}
+body::before{background:radial-gradient(38% 34% at 18% 18%,rgba(124,92,255,.6),transparent 62%),radial-gradient(34% 40% at 82% 14%,rgba(0,205,185,.5),transparent 62%),radial-gradient(44% 38% at 72% 86%,rgba(255,120,80,.45),transparent 62%),radial-gradient(40% 40% at 14% 86%,rgba(60,140,255,.5),transparent 62%);animation:aur 24s ease-in-out infinite alternate}
+body::after{opacity:0;transition:opacity 1.6s;background:var(--tint,none)}
+body.safe::after{opacity:.75;--tint:radial-gradient(60% 50% at 50% 25%,rgba(34,197,94,.55),transparent 70%)}
+body.caution::after{opacity:.75;--tint:radial-gradient(60% 50% at 50% 25%,rgba(250,180,20,.55),transparent 70%)}
+body.danger::after{opacity:.85;--tint:radial-gradient(60% 50% at 50% 25%,rgba(255,50,60,.65),transparent 70%)}
+@keyframes aur{to{transform:translate3d(5%,-4%,0) rotate(10deg) scale(1.18)}}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) body::before{opacity:.5}}
+.card,.hero,.hw div,.verdict{background:color-mix(in srgb,var(--card) 64%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border:1px solid color-mix(in srgb,var(--ink) 13%,transparent);box-shadow:0 10px 34px rgba(25,20,70,.14)}
+.verdict.safe{background:var(--okbg)}.verdict.caution{background:var(--warnbg)}.verdict.danger{background:var(--badbg)}
+h1 span,.by b{background:linear-gradient(90deg,#7c5cff,#00c8b4,#ff7850);-webkit-background-clip:text;background-clip:text;color:transparent}
+.byl{display:block;font-size:.4em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-top:2px}
+.hl{background:linear-gradient(90deg,var(--ink),var(--brand) 70%,#ff6b9a);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.7em}
+.go{background:linear-gradient(90deg,#5b6cff,#8a5cff 50%,#ff6b9a);color:#fff;box-shadow:0 10px 28px rgba(110,90,255,.5);transition:transform .15s}.go:hover{transform:translateY(-2px)}
+.by{text-align:center;margin:24px 0 0;font-weight:700;letter-spacing:.02em}
+.radar{text-align:center}.radar svg{width:min(270px,85%);margin:0 auto;display:block;overflow:visible}
+.sc b{font-size:2.4em;line-height:1}.sc span{display:block;color:var(--mute);font-weight:600}
+.ign{text-align:left;background:var(--bg);border-radius:14px;padding:12px;margin-top:12px}.ign p{margin:0}
+mark{background:linear-gradient(transparent 35%,color-mix(in srgb,var(--bad) 40%,transparent) 35%);color:inherit;border-radius:4px;cursor:pointer;padding:0 2px;box-shadow:0 0 14px color-mix(in srgb,var(--bad) 45%,transparent)}
+.xrt{white-space:pre-wrap;background:var(--bg);border-radius:12px;padding:12px;font-size:.9em;margin-bottom:8px;max-height:260px;overflow:auto}.xrt:empty{display:none}
+.why{color:var(--bad);font-weight:600;margin:0 0 8px}.why:empty{display:none}
+#out>*{animation:up .6s both}#out>:nth-child(2){animation-delay:.08s}#out>:nth-child(3){animation-delay:.16s}#out>:nth-child(4){animation-delay:.24s}#out>:nth-child(5){animation-delay:.32s}
+@keyframes up{from{opacity:0;transform:translateY(16px)}}
+@media (prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}}
+@media print{body::before,body::after{display:none}.card,.verdict{box-shadow:none;backdrop-filter:none}}
+:root{--s1:#d4ebff;--s2:#f3f9ff;--s3:#ffe9d0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--s1:#040b18;--s2:#0a2140;--s3:#143a5c}}
+:root[data-theme="dark"]{--s1:#040b18;--s2:#0a2140;--s3:#143a5c}
+body{background:radial-gradient(55% 40% at 8% 100%,rgba(255,165,80,.5),transparent 70%),linear-gradient(180deg,var(--s1),var(--s2) 55%,var(--s3)) fixed}
+body::before{inset:auto;top:-16vmin;right:-24vmin;width:92vmin;height:92vmin;border-radius:50%;filter:none;opacity:1!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='white' stroke-opacity='.35' stroke-width='.8'%3E%3Cellipse cx='100' cy='100' rx='30' ry='100'/%3E%3Cellipse cx='100' cy='100' rx='65' ry='100'/%3E%3Cpath d='M100 0V200M0 100H200'/%3E%3Cellipse cx='100' cy='100' rx='100' ry='35'/%3E%3Cellipse cx='100' cy='100' rx='100' ry='70'/%3E%3C/svg%3E") center/100% 100% no-repeat,radial-gradient(ellipse 17% 13% at 36% 34%,#46c47e 0 70%,transparent 72%),radial-gradient(ellipse 12% 20% at 52% 62%,#46c47e 0 70%,transparent 72%),radial-gradient(ellipse 16% 11% at 68% 36%,#5bd08a 0 70%,transparent 72%),radial-gradient(circle at 34% 28%,#8fdcff,#2f86e6 55%,#0b3a8a);box-shadow:0 0 140px 20px rgba(90,170,255,.45),inset -40px -30px 90px rgba(0,20,70,.55);animation:flt 16s ease-in-out infinite alternate}
+@keyframes flt{to{transform:translateY(3vmin) rotate(-4deg)}}
+.hello{font-size:.85em;color:var(--mute);letter-spacing:.04em}
+.byl{font-size:.36em;letter-spacing:.16em;font-weight:700;margin-top:5px;color:var(--mute)}.byl b{color:var(--ink);font-weight:800}
+.by{font-size:.8em}
+.mic{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 14px;font:inherit;font-size:.9em;cursor:pointer;margin-bottom:8px}
+.askrow .mic{padding:0 14px;margin:0;background:var(--bg);border:1px solid var(--line);color:var(--ink)}
+.size{display:flex;gap:6px}
+.calbtn{display:block;margin-top:10px;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600;font-size:.9em;text-align:center}
+.conf{display:block;color:var(--mute);font-size:.8em;margin-top:2px}
+html.er body{font-family:Verdana,"Trebuchet MS",sans-serif;letter-spacing:.03em;word-spacing:.12em;line-height:1.85}
+html.er .card,html.er .hero,html.er .verdict{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card);border:2px solid var(--ink)}
+html.er body::before{opacity:.2!important}
+.size button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.mic[aria-pressed="true"]{background:var(--brand)!important;color:var(--brand-ink)!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Plain<span>ly</span><small class="byl">Built by <b>Dolapo Oyatomi</b></small></h1><div class="size"><button id="er" aria-pressed="false">◐ Easy read</button><button id="fs" aria-label="Change text size">Aa Bigger text</button></div></header>
+<section class="hero"><h2 class="hl">Understand any bill, label or letter in seconds.</h2><p>Snap a photo or paste the text. Plainly tells you what it means, what to do next, and whether it looks like a scam, in your language and at your reading level.</p><div class="hello">Hello · Bonjour · Hola · नमस्ते · 你好 · Bawo ni · Sannu · Ndewo · مرحبا</div></section>
+<p class="tag hide">Confusing bill, medicine label, form, contract or message? Show it to me. I’ll say what it means, what to do, and what to watch out for.</p>
+
+<div class="card">
+<div class="ex"><span>Try an example:</span><button data-ex="scam">🚨 Suspicious SMS</button><button data-ex="bill">💡 Electricity bill</button><button data-ex="med">💊 Medicine label</button></div>
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" id="t-photo" aria-selected="true">📷 Photo</button>
+<button class="tab" role="tab" id="t-text" aria-selected="false">✍️ Paste text</button>
+</div>
+<div id="p-photo">
+<img id="prev" alt="Your photo preview">
+<label class="drop"><input type="file" id="file" accept="image/*"><strong id="dl">Tap to take or choose a photo</strong><span>Bills, labels, letters, screenshots</span></label>
+</div>
+<div id="p-text" class="hide"><button class="mic" id="mic1" type="button">🎤 Speak it instead</button><textarea id="txt" placeholder="Paste the message, email, contract text or form wording here…"></textarea></div>
+<div class="row">
+<select id="lang" aria-label="Language">
+<option value="the same language as the document">Language: same as document</option>
+<option>English</option><option>Français</option><option>Español</option><option>Português</option><option>Yorùbá</option><option>Hausa</option><option>Igbo</option><option>Nigerian Pidgin</option><option>العربية</option><option>हिन्दी</option><option>中文</option><option>Kiswahili</option>
+</select>
+<select id="lvl" aria-label="Reading level">
+<option value="simple">Simple words</option>
+<option value="very simple, as if explaining to a 10-year-old or someone who has never seen this kind of document">Extra simple</option>
+<option value="clear but with the key technical terms explained briefly">With key terms</option>
+</select>
+</div>
+<button class="go" id="go">Explain it</button>
+<div id="err" class="err hide"></div>
+</div>
+
+<div class="card hide" id="hist"><h2>Your recent explanations</h2><p id="stats" class="who"></p><div id="hl"></div><button class="lnk" id="hclr">Clear history</button></div>
+<div id="out" class="hide">
+<div class="card radar"><svg viewBox="0 0 180 105" role="img" aria-label="Risk gauge"><defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#22c55e"/><stop offset=".5" stop-color="#facc15"/><stop offset="1" stop-color="#ef4444"/></linearGradient></defs><path d="M10 90A80 80 0 0 1 170 90" fill="none" stroke="var(--line)" stroke-width="14" stroke-linecap="round"/><path d="M10 90A80 80 0 0 1 170 90" fill="none" stroke="url(#gg)" stroke-width="14" stroke-linecap="round"/><g id="needle" style="transform-origin:90px 90px;transition:transform 1.6s cubic-bezier(.2,1.5,.3,1)"><line x1="90" y1="90" x2="90" y2="24" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/></g><circle cx="90" cy="90" r="8" fill="var(--ink)"/></svg><div class="sc"><b id="score">0</b><span id="scoreLbl"></span><small id="conf" class="conf"></small></div><div id="ignbox" class="ign"><h2>⏳ If you do nothing</h2><p id="ign"></p></div><a id="cal" class="calbtn hide" target="_blank" rel="noopener"></a></div>
+<div id="verdict" class="verdict"></div>
+<div class="card"><h2 id="kind"></h2><p class="big" id="sum"></p></div>
+<div class="card" id="xr"><h2>🔍 Scam X-Ray: tap a glowing phrase</h2><div id="xrt" class="xrt"></div><p id="xrwhy" class="why"></p><ul id="xrl"></ul></div>
+<div class="card" id="c-nums"><h2>Key numbers</h2><div class="nums" id="nums"></div></div>
+<div class="card"><h2>In plain words</h2><ul id="plain"></ul></div>
+<div class="card"><h2>What to do next</h2><ol class="steps" id="steps"></ol></div>
+<div class="card" id="c-flags"><h2>Watch out</h2><div id="flags"></div></div>
+<div class="card" id="c-ask"><h2>Good questions to ask</h2><ul id="ask"></ul></div>
+<div class="acts"><button id="print">🖨 Print / save PDF</button><button id="share">📤 Share with family</button><button id="speak">🔊 Read aloud</button><button id="copy">📋 Copy</button><button id="again">↺ New one</button></div>
+<div class="card chat" id="rcard"><h2>✍️ Write my reply for me</h2><div class="row" style="margin:0 0 10px"><select id="rtype" aria-label="Reply type"><option value="a polite reply that answers it">Polite reply</option><option value="a request for more time or a payment plan">Ask for more time</option><option value="a firm but polite dispute or complaint about anything unfair or wrong">Dispute or complain</option><option value="a short message reporting this as a suspected scam and refusing to engage">Report as scam</option></select><button class="mic" id="rgo" type="button" style="margin:0">Write it</button></div><div id="rout" class="xrt" style="max-height:none"></div><button class="mic hide" id="rcopy" type="button">📋 Copy reply</button></div>
+<div class="card chat"><h2>Still unsure? Ask a question</h2><div id="chatlog" aria-live="polite"></div><div class="askrow"><button class="mic" id="mic2" type="button" aria-label="Ask by voice">🎤</button><input id="askq" placeholder="e.g. What happens if I pay late?" aria-label="Your question"><button id="askgo">Ask</button></div></div>
+<div class="card chat" id="fb"><h2>How did Plainly do?</h2><div class="askrow" style="margin-bottom:8px"><button class="mic" data-r="helpful" type="button" aria-pressed="false" style="padding:12px;flex:1">👍 Helpful</button><button class="mic" data-r="not-helpful" type="button" aria-pressed="false" style="padding:12px;flex:1">👎 Not quite</button></div><div class="askrow"><input id="fbc" placeholder="Tell us more (optional)" aria-label="Feedback comment"><button id="fbsend" type="button">Send</button></div><p id="fbt" class="who"></p></div>
+</div>
+<section class="how"><h2>How it works</h2><div class="hw"><div><b>1. Show it</b><span>Take a photo or paste the words.</span></div><div><b>2. Understand it</b><span>Plain words, key numbers, red flags.</span></div><div><b>3. Act on it</b><span>Clear next steps and questions to ask.</span></div></div><p class="who">Made for older adults, students, new parents, small-business owners, and anyone reading in a second language.</p></section>
+<section class="how"><h2>Your privacy</h2><p class="who">Your photo is shrunk on your device and used only to write the explanation. Plainly doesn’t store your documents. Past explanations are saved only on this device, and you can clear them anytime.</p></section>
+<form name="feedback" method="POST" data-netlify="true" hidden><input name="rating"><input name="comment"><input name="risk"></form>
+<p class="by">✦ Built by <b>Dolapo Oyatomi</b></p>
+<p class="note">Plainly helps you understand things. It is not a lawyer, doctor or accountant. For big decisions, check with a professional. Never share PINs or passwords.</p>
+</div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var mode='photo',blob=null,last=null,sizes=[18,21,24],si=0,sample=null;
+function tab(m){mode=m;$('t-photo').setAttribute('aria-selected',m==='photo');$('t-text').setAttribute('aria-selected',m==='text');$('p-photo').classList.toggle('hide',m!=='photo');$('p-text').classList.toggle('hide',m!=='text')}
+$('t-photo').onclick=function(){tab('photo')};$('t-text').onclick=function(){tab('text')};
+$('fs').onclick=function(){si=(si+1)%3;document.documentElement.style.setProperty('--fs',sizes[si]+'px');$('fs').textContent=si===2?'Aa Normal text':'Aa Bigger text'};
+
+function shrink(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),im=new Image();
+im.onload=function(){var m=1600,s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(function(b){res({blob:b,url:u})},'image/jpeg',.85)};
+im.onerror=function(){rej(new Error('bad image'))};im.src=u})}
+$('file').onchange=function(e){var f=e.target.files[0];if(!f)return;shrink(f).then(function(r){blob=r.blob;$('prev').src=r.url;$('prev').style.display='block';$('dl').textContent='Tap to choose a different photo'}).catch(function(){showErr('I couldn’t open that image. Please try another photo.')})};
+
+function showErr(m){var e=$('err');e.textContent=m;e.classList.remove('hide')}
+function li(t){var l=document.createElement('li');l.textContent=t;return l}
+function fill(id,arr,mk){var el=$(id);el.innerHTML='';(arr||[]).forEach(function(x){el.appendChild(mk(x))})}
+
+var PROMPT=function(lang,lvl,isImg){return 'You are Plainly, a kind, careful helper that explains confusing everyday documents (bills, medicine labels, forms, contracts, official letters, messages, emails) to anyone, from a teenager to a grandparent.\n'+
+'The '+(isImg?'attached image shows':'text below is')+' the document. Explain it in '+lang+' at a '+lvl+' reading level. Short sentences. No jargon. Never invent facts that are not in the document; if something is unreadable or missing, say so.\n'+
+'Check carefully for scam signs: urgency or threats, requests for PINs/passwords/OTPs/bank details, gift cards or crypto payment, odd links or senders, too-good-to-be-true offers, hidden fees, auto-renewals, penalties, unfair contract clauses. For medicine, include dose, timing, warnings and who should ask a doctor first; never give a personal dosing instruction beyond what the label says.\n'+
+'Return ONLY JSON, no markdown fences, with this exact shape:\n'+
+'{"kind":"short document type, e.g. Electricity bill","risk":"safe|caution|danger","verdict":"one short sentence on the overall safety/importance","summary":"2 sentences max: what this is and what it wants from me","numbers":[{"label":"e.g. Amount due","value":"e.g. 42,500"}],"plain":["3 to 6 plain-language points"],"steps":["2 to 5 concrete next steps, in order, with deadlines if any"],"flags":[{"level":"high|medium|low","text":"a warning, suspicious sign, or reassuring note"}],"ask":["0 to 3 smart questions to ask the sender, a professional or a trusted person"],"score":"integer 0-100 risk level: 0 completely safe, 100 near-certain scam or serious harm","ifIgnore":"one sentence: what realistically happens if I do nothing","hl":[{"q":"a short phrase copied EXACTLY, character for character, from the document that matters or is suspicious","why":"under 12 words on why it matters"}],"deadline":"the most important deadline as YYYY-MM-DD, or empty string if none","deadlineWhat":"3 to 6 words naming what is due","confidence":"high|medium|low: how sure you are, given how clear the document is","unclear":["0 to 2 things you could not read or cannot be sure of"]}\n'+
+'Use risk "danger" only for likely scams or serious harm, "caution" for deadlines, fees, or things worth double-checking, "safe" otherwise.'};
+
+function render(d){last=d;save(d);$('chatlog').innerHTML='';radar(d);xray(d);$('rout').textContent='';$('rcopy').classList.add('hide');$('rcopy').textContent='📋 Copy reply';var r=['safe','caution','danger'].indexOf(d.risk)>-1?d.risk:'caution';
+var v=$('verdict');v.className='verdict '+r;v.innerHTML='';var ic=document.createElement('span');ic.className='ic';ic.textContent=r==='safe'?'✅':r==='danger'?'🚨':'⚠️';var t=document.createElement('div');t.textContent=({safe:'Looks fine',caution:'Take a careful look',danger:'Be very careful'})[r];var s=document.createElement('small');s.textContent=d.verdict||'';t.appendChild(s);v.appendChild(ic);v.appendChild(t);
+$('kind').textContent=d.kind||'Document';$('sum').textContent=d.summary||'';
+var n=d.numbers||[];$('c-nums').classList.toggle('hide',!n.length);fill('nums',n,function(x){var a=document.createElement('div');a.className='num';var b=document.createElement('b');b.textContent=x.value;var sp=document.createElement('span');sp.textContent=x.label;a.appendChild(b);a.appendChild(sp);return a});
+fill('plain',d.plain,li);fill('steps',d.steps,li);
+var f=d.flags||[];$('c-flags').classList.toggle('hide',!f.length);fill('flags',f,function(x){var a=document.createElement('div');a.className='flag '+(['high','medium','low'].indexOf(x.level)>-1?x.level:'medium');a.textContent=(x.level==='high'?'🚩 ':x.level==='low'?'👍 ':'👀 ')+x.text;return a});
+var q=d.ask||[];$('c-ask').classList.toggle('hide',!q.length);fill('ask',q,li);
+$('out').classList.remove('hide');$('out').scrollIntoView({behavior:'smooth',block:'start'})}
+
+function asText(d){return [d.kind,d.verdict,'',d.summary,'','Plain words:'].concat((d.plain||[]).map(function(x){return '- '+x}),['','Next steps:'],(d.steps||[]).map(function(x,i){return (i+1)+'. '+x}),['','Watch out:'],(d.flags||[]).map(function(x){return '- '+x.text})).join('\n')}
+
+$('go').onclick=function(){
+$('err').classList.add('hide');
+var text=$('txt').value.trim();
+if(mode==='photo'&&!blob){showErr('Please add a photo first, or switch to “Paste text”.');return}
+if(mode==='text'&&text.length<10){showErr('Please paste the text you’d like explained.');return}
+if(!sample){showErr('Plainly needs to be opened inside Claude to work. Please open this page from claude.ai.');return}
+var b=$('go');b.disabled=true;b.innerHTML='<span class="spin"></span>Reading it carefully…';
+var lang=$('lang').value,lvl=$('lvl').value,isImg=mode==='photo';
+var input=PROMPT(lang,lvl,isImg)+(isImg?'':'\n\nDOCUMENT:\n"""\n'+text.slice(0,12000)+'\n"""');
+var opts={cache:false};if(isImg)opts.images=[blob];
+Promise.resolve(sample.json(input,opts)).then(function(d){d._src=isImg?'':text;render(d)}).catch(function(e){
+var c=e&&e.code;showErr(c==='not_granted'?'Permission is needed to explain documents. Please allow it and try again.':c==='rate_limited'?'Lots of people are using this right now. Please wait a moment and try again.':'Something went wrong reading that. Try a clearer photo or paste the text instead.')
+}).then(function(){b.disabled=false;b.textContent='Explain it'})};
+
+$('speak').onclick=function(){if(!last||!window.speechSynthesis)return;if(speechSynthesis.speaking){speechSynthesis.cancel();return}var u=new SpeechSynthesisUtterance(asText(last));u.lang=LC[$('lang').value]||'';speechSynthesis.speak(u)};
+$('copy').onclick=function(){if(!last)return;var t=asText(last);try{navigator.clipboard.writeText(t).then(function(){$('copy').textContent='✓ Copied'})}catch(e){$('copy').textContent='Copy not available'}};
+$('again').onclick=function(){if(window.speechSynthesis)speechSynthesis.cancel();$('out').classList.add('hide');blob=null;last=null;$('file').value='';$('txt').value='';$('prev').style.display='none';$('dl').textContent='Tap to take or choose a photo';$('copy').textContent='📋 Copy';window.scrollTo({top:0,behavior:'smooth'})};
+
+var HK='explainit.history';
+function hget(){try{return JSON.parse(localStorage.getItem(HK)||'[]')}catch(e){return[]}}
+function hset(a){try{localStorage.setItem(HK,JSON.stringify(a))}catch(e){}}
+function save(d){var a=hget().filter(function(x){return x.d.summary!==d.summary});if(a.length===hget().length)bump(d);a.unshift({t:Date.now(),d:d});hset(a.slice(0,8));showHist()}
+function showHist(){var a=hget(),el=$('hl'),s=sget();$('stats').textContent=s.n?'Your impact: '+s.n+' document'+(s.n===1?'':'s')+' decoded · '+s.r+' likely scam'+(s.r===1?'':'s')+' caught':'';$('hist').classList.toggle('hide',!a.length);el.innerHTML='';a.forEach(function(x){var b=document.createElement('button');b.className='hi';b.textContent=(x.d.risk==='danger'?'🚨 ':x.d.risk==='safe'?'✅ ':'⚠️ ')+(x.d.kind||'Document')+' · '+new Date(x.t).toLocaleDateString();b.onclick=function(){render(x.d)};el.appendChild(b)})}
+$('hclr').onclick=function(){hset([]);showHist()};showHist();
+$('err').setAttribute('role','alert');
+var EX={scam:'URGENT: Your account has been suspended due to suspicious activity. Confirm your PIN and the 6-digit code we just sent within 30 minutes at http://secure-verify-account.co/login or your money will be frozen and your account closed. Do not tell anyone.',bill:'ELECTRIC CO. Account 40-2291. Billing period 1 Sep to 30 Sep. Previous balance 18,400.00. Payment received 18,400.00. Energy used 312 kWh at 80.00 = 24,960.00. Service charge 1,500.00. TOTAL DUE 26,460.00 by 21 Oct. A 5% late fee applies after the due date. Your plan renews automatically for 12 months unless you cancel 30 days before 31 Dec. Early termination fee: 15,000.00.',med:'Ibuprofen 400 mg tablets. Adults and children over 12: take 1 tablet every 6 to 8 hours with food. Do not take more than 3 tablets in 24 hours. Do not use if you are allergic to aspirin, have stomach ulcers or kidney disease, or are in the last 3 months of pregnancy. Not for children under 12. Stop and ask a doctor if pain lasts more than 3 days.'};
+document.querySelectorAll('[data-ex]').forEach(function(b){b.onclick=function(){tab('text');$('txt').value=EX[b.getAttribute('data-ex')];$('go').click()}});
+function sget(){try{return JSON.parse(localStorage.getItem('plainly.stats')||'{"n":0,"r":0}')}catch(e){return{n:0,r:0}}}
+function bump(d){var s=sget();s.n++;if(d.risk==='danger')s.r++;try{localStorage.setItem('plainly.stats',JSON.stringify(s))}catch(e){}}
+$('er').onclick=function(){var on=document.documentElement.classList.toggle('er');$('er').setAttribute('aria-pressed',on)};
+$('rgo').onclick=function(){if(!last||!sample)return;var b=$('rgo');b.disabled=true;b.textContent='Writing…';sample('You are Plainly. A document was analysed: '+JSON.stringify(last)+'\nWrite '+$('rtype').value+', from the person who received it. Language: '+$('lang').value+'. Keep it short, respectful and ready to send. Use [placeholders] for names, account numbers and dates you do not know. Never include passwords, PINs or card numbers. Output only the message text.',{cache:false}).then(function(r){$('rout').textContent=r.text;$('rcopy').classList.remove('hide')}).catch(function(){$('rout').textContent='Sorry, I couldn’t write that. Please try again.'}).then(function(){b.disabled=false;b.textContent='Write it'})};
+$('rcopy').onclick=function(){try{navigator.clipboard.writeText($('rout').textContent);$('rcopy').textContent='✓ Copied'}catch(e){}};
+var fbr='';document.querySelectorAll('[data-r]').forEach(function(b){b.onclick=function(){fbr=b.getAttribute('data-r');document.querySelectorAll('[data-r]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}});
+$('fbsend').onclick=function(){var c=$('fbc').value.trim();if(!fbr&&!c){$('fbt').textContent='Tap 👍 or 👎, or write a short note first.';return}fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'form-name=feedback&rating='+encodeURIComponent(fbr)+'&comment='+encodeURIComponent(c)+'&risk='+encodeURIComponent(last?last.risk:'')}).then(function(r){if(!r.ok)throw 0;$('fbt').textContent='Thank you! Your feedback helps make Plainly better. 💙';$('fbc').value=''}).catch(function(){$('fbt').textContent='Thanks! Feedback is collected on the live website.'})};
+$('print').onclick=function(){window.print()};
+function say(c,t){var m=document.createElement('div');m.className='msg '+c;m.textContent=t;$('chatlog').appendChild(m)}
+function ask(){var q=$('askq').value.trim();if(!q||!last)return;if(!sample){say('bot','This needs to be opened inside Claude.');return}say('you',q);$('askq').value='';var b=$('askgo');b.disabled=true;
+sample('You are Plainly, a kind helper. A document was already analysed: '+JSON.stringify(last)+'\nAnswer the follow-up question in '+$('lang').value+', in simple words, 1 to 4 short sentences. Be honest about what you cannot know from the document; never invent facts. For medical, legal or money decisions, suggest a professional when it matters.\nQuestion: '+q,{cache:false}).then(function(r){say('bot',r.text);if(voiceQ)speakTxt(r.text)}).catch(function(){say('bot','Sorry, I couldn’t answer that. Please try again.')}).then(function(){b.disabled=false})}
+$('askgo').onclick=ask;$('askq').onkeydown=function(e){if(e.key==='Enter')ask()};
+function radar(d){var r=['safe','caution','danger'].indexOf(d.risk)>-1?d.risk:'caution',sc=Math.max(0,Math.min(100,Math.round(+d.score>=0?+d.score:(r==='danger'?90:r==='safe'?10:50)))),n=$('needle');document.body.className=r;n.style.transform='rotate(-90deg)';requestAnimationFrame(function(){requestAnimationFrame(function(){n.style.transform='rotate('+(sc*1.8-90)+'deg)'})});$('score').textContent=sc+'/100';$('scoreLbl').textContent=sc<30?'Low risk':sc<65?'Be careful':'High risk';$('ign').textContent=d.ifIgnore||'';$('conf').textContent=d.confidence?'AI confidence: '+d.confidence+(d.unclear&&d.unclear.length?' · Unclear: '+d.unclear.join('; '):''):'';var c=$('cal'),dl=/^\d{4}-\d{2}-\d{2}$/.test(d.deadline||'')?d.deadline:'';c.classList.toggle('hide',!dl);if(dl){var n2=new Date(dl+'T00:00:00Z');n2.setUTCDate(n2.getUTCDate()+1);c.href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent((d.deadlineWhat||'Deadline')+' (Plainly)')+'&dates='+dl.replace(/-/g,'')+'/'+n2.toISOString().slice(0,10).replace(/-/g,'');c.textContent='📅 Add “'+(d.deadlineWhat||'deadline')+'” ('+dl+') to calendar'}$('ignbox').classList.toggle('hide',!d.ifIgnore)}
+function xray(d){var h=(d.hl||[]).filter(function(x){return x&&x.q}),box=$('xrt'),src=d._src||'',rg=[],p=0;$('xr').classList.toggle('hide',!h.length);box.innerHTML='';$('xrwhy').textContent='';
+h.forEach(function(x){var q=String(x.q),i=src.toLowerCase().indexOf(q.toLowerCase());if(i>-1)rg.push([i,i+q.length,x.why||''])});rg.sort(function(a,b){return a[0]-b[0]});
+rg.forEach(function(g){if(g[0]<p)return;box.appendChild(document.createTextNode(src.slice(p,g[0])));var m=document.createElement('mark');m.textContent=src.slice(g[0],g[1]);m.title=g[2];m.tabIndex=0;m.onclick=function(){$('xrwhy').textContent='💬 '+g[2]};box.appendChild(m);p=g[1]});
+if(rg.length)box.appendChild(document.createTextNode(src.slice(p)));
+fill('xrl',h,function(x){var l=document.createElement('li');l.textContent='“'+x.q+'” — '+(x.why||'');return l})}
+$('share').onclick=function(){if(!last)return;var t='Checked with Plainly: '+(last.verdict||'')+'\n'+(last.summary||'')+'\nRisk: '+(last.score!=null?last.score:'?')+'/100';if(navigator.share){navigator.share({text:t}).catch(function(){})}else{try{navigator.clipboard.writeText(t);$('share').textContent='✓ Copied to share'}catch(e){}}};
+$('again').addEventListener('click',function(){document.body.className=''});
+var voiceQ=false,LC={'English':'en-US','Français':'fr-FR','Español':'es-ES','Português':'pt-PT','Yorùbá':'yo-NG','Hausa':'ha-NG','Igbo':'ig-NG','Nigerian Pidgin':'en-NG','العربية':'ar-SA','हिन्दी':'hi-IN','中文':'zh-CN','Kiswahili':'sw-KE'},SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function speakTxt(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang=LC[$('lang').value]||'';speechSynthesis.speak(u)}catch(e){}voiceQ=false}
+function listen(btn,onText,onErr){if(!SR){onErr('Voice input isn’t supported in this browser or view. Open the link directly in Chrome, Edge or Safari and allow the microphone.');return}
+var r=new SR(),old=btn.textContent,fin='';r.lang=LC[$('lang').value]||navigator.language||'en-US';r.interimResults=true;r.continuous=false;btn.textContent='🔴 Listening…';
+r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;fin=t;onText(t,false)};
+r.onerror=function(e){onErr(e.error==='not-allowed'||e.error==='service-not-allowed'?'The microphone is blocked. Allow it in your browser, or open the link directly in Chrome, Edge or Safari.':'I couldn’t hear that. Please try again.')};
+r.onend=function(){btn.textContent=old;if(fin)onText(fin,true)};
+try{r.start()}catch(e){btn.textContent=old}}
+$('mic1').onclick=function(){var b0=$('txt').value;listen($('mic1'),function(t){$('txt').value=(b0?b0+' ':'')+t},showErr)};
+$('mic2').onclick=function(){listen($('mic2'),function(t,done){$('askq').value=t;if(done){voiceQ=true;ask()}},function(m){say('bot',m)})};
+function b64(b){return new Promise(function(res,rej){var f=new FileReader();f.onload=function(){res(String(f.result).split(',')[1])};f.onerror=rej;f.readAsDataURL(b)})}
+function call(p,o){var imgs=(o&&o.images)||[];return Promise.all(imgs.map(b64)).then(function(a){return fetch('/api/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:p,images:a.map(function(d){return{data:d}})})})}).then(function(r){if(!r.ok){var e=new Error('http '+r.status);e.code=r.status===429?'rate_limited':'error';throw e}return r.json()}).then(function(j){return j.text||''})}
+sample=function(p,o){return call(p,o).then(function(t){return{text:t}})};
+sample.json=function(p,o){return call(p,o).then(function(t){var a=t.indexOf('{'),b=t.lastIndexOf('}');return JSON.parse(t.slice(a,b+1))})};
+})();
+</script>
+</body>
+</html>
